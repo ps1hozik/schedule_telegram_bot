@@ -237,6 +237,7 @@ variants: dict[State, str] = {
     )
 )
 async def clear_current_state(message: types.Message, state: FSMContext) -> None:
+    await message.delete()
     current_state = await state.get_state()
     await message.answer(
         text=f"Выберите {variants[current_state]} или нажмите /cancel для отмены"
