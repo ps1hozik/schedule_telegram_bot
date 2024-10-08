@@ -11,6 +11,8 @@ collection_users = db[getenv("USERS_DB")]
 # Получение расписания для пользователя по его ID
 def get_user_schedule(user_id: int) -> list:
     user_data = collection_users.find_one({"user_id": user_id})
+    if not user_data:
+        return []
     group_name = user_data.get("subgroup")
     faculty_name = user_data.get("faculty")
     if not group_name or not faculty_name:
@@ -25,7 +27,6 @@ def get_user_schedule(user_id: int) -> list:
 # Получение расписания на один день
 def get_schedule_for_day(user_id: int, lesson_date: str) -> str | None:
     full_schedule = get_user_schedule(user_id)
-
     for daily_schedule in full_schedule:
         if daily_schedule["date"] == lesson_date:
             # valid_lessons = []
