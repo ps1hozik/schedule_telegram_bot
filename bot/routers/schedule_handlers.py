@@ -86,18 +86,18 @@ async def handle_find_teacher(message: types.Message) -> None:
     parts = message.text.split(maxsplit=1)
     if len(parts) <= 1:
         await message.reply("Пожалуйста, укажите ФИО. Например: /find Иванов И И")
+    else:
+        teacher_name = parts[1]
+        schedule = get_teacher_schedule(teacher_name)
 
-    teacher_name = parts[1]
-    schedule = get_teacher_schedule(teacher_name)
-
-    if not schedule:
-        await message.answer(
-            text=f"Расписание для <i><u>{teacher_name}</u></i> не найдено",
-            reply_markup=main_kb(),
-        )
-
-    for item in schedule:
-        await message.answer(
-            text=item,
-            reply_markup=main_kb(),
-        )
+        if not schedule:
+            await message.answer(
+                text=f"Расписание для <i><u>{teacher_name}</u></i> не найдено",
+                reply_markup=main_kb(),
+            )
+        else:
+            for item in schedule:
+                await message.answer(
+                    text=item,
+                    reply_markup=main_kb(),
+                )
