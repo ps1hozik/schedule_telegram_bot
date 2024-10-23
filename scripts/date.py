@@ -14,11 +14,10 @@ def _get_current_datetime_minsk(days: int = 0) -> datetime:
 def get_week_date_range() -> tuple[str, str]:
     current_weekday, current_date_minsk = get_current_date()
     current_datetime_minsk = _get_current_datetime_minsk()
-    if 0 <= current_weekday <= 4 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
-
-        start_date = current_date_minsk - timedelta(days=current_weekday)
-    else:
+    if 4 <= current_weekday <= 6 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
         start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
+    else:
+        start_date = current_date_minsk - timedelta(days=current_weekday)
 
     end_date = start_date + timedelta(days=5)
 
@@ -29,10 +28,10 @@ def get_week_date_range() -> tuple[str, str]:
 def get_date_by_weekday(day_number: int) -> str:
     current_weekday, current_date_minsk = get_current_date()
     current_datetime_minsk = _get_current_datetime_minsk()
-    if 0 <= current_weekday <= 4 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
-        start_date = current_date_minsk - timedelta(days=current_weekday)
-    else:
+    if 4 <= current_weekday <= 6 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
         start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
+    else:
+        start_date = current_date_minsk - timedelta(days=current_weekday)
 
     target_date = start_date + timedelta(days=day_number)
 
@@ -44,7 +43,6 @@ def get_current_date(days: int = 0) -> tuple[int, date]:
     current_datetime_minsk = _get_current_datetime_minsk(days=days)
     current_date_minsk = current_datetime_minsk.date()
     weekday_minsk = current_date_minsk.weekday()
-    print(current_datetime_minsk.time() < datetime.strptime("16:30", "%H:%M").time())
     return weekday_minsk, current_date_minsk
 
 
@@ -53,10 +51,10 @@ def is_same_week(lesson_date: date) -> bool:
     current_weekday, current_date_minsk = get_current_date()
     lesson_weekday = lesson_date.weekday()
     current_datetime_minsk = _get_current_datetime_minsk()
-    if 0 <= current_weekday <= 4 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
-        current_monday = current_date_minsk - timedelta(days=current_weekday)
-    else:
+    if 4 <= current_weekday <= 6 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
         current_monday = current_date_minsk + timedelta(days=(7 - current_weekday))
+    else:
+        current_monday = current_date_minsk - timedelta(days=current_weekday)
 
     lesson_monday = lesson_date - timedelta(days=lesson_weekday)
 
@@ -65,3 +63,5 @@ def is_same_week(lesson_date: date) -> bool:
 
 if __name__ == "__main__":
     print(get_current_date())
+    print(get_week_date_range())
+    print(get_date_by_weekday(0))
