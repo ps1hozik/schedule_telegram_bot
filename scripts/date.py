@@ -3,22 +3,14 @@ from datetime import timedelta, datetime, date
 import pytz
 
 
-
-def _get_current_datetime_minsk(days: int = 0) -> datetime:
-    current_utc_time = datetime.now(pytz.timezone("UTC")) + timedelta(days=days)
-    minsk_timezone = pytz.timezone("Europe/Minsk")
-    current_datetime_minsk = current_utc_time.astimezone(minsk_timezone)
-    return current_datetime_minsk
-
-
 # Получение диапазона дат недели
 def get_week_date_range() -> tuple[str, str]:
     current_weekday, current_date_minsk = get_current_date()
-    current_datetime_minsk = _get_current_datetime_minsk()
-    if 4 <= current_weekday <= 6 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
-        start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
-    else:
+
+    if 0 <= current_weekday <= 3:
         start_date = current_date_minsk - timedelta(days=current_weekday)
+    else:
+        start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
 
     end_date = start_date + timedelta(days=5)
 
@@ -28,11 +20,11 @@ def get_week_date_range() -> tuple[str, str]:
 # Получение даты по номеру дня недели
 def get_date_by_weekday(day_number: int) -> str:
     current_weekday, current_date_minsk = get_current_date()
-    current_datetime_minsk = _get_current_datetime_minsk()
-    if 4 <= current_weekday <= 6 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
-        start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
-    else:
+
+    if 0 <= current_weekday <= 3:
         start_date = current_date_minsk - timedelta(days=current_weekday)
+    else:
+        start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
 
     target_date = start_date + timedelta(days=day_number)
 
@@ -41,9 +33,12 @@ def get_date_by_weekday(day_number: int) -> str:
 
 # Получение текущей даты и дня недели в Минске
 def get_current_date(days: int = 0) -> tuple[int, date]:
-    current_datetime_minsk = _get_current_datetime_minsk(days=days)
+    current_utc_time = datetime.now(pytz.timezone("UTC")) + timedelta(days=days)
+    minsk_timezone = pytz.timezone("Europe/Minsk")
+    current_datetime_minsk = current_utc_time.astimezone(minsk_timezone)
     current_date_minsk = current_datetime_minsk.date()
     weekday_minsk = current_date_minsk.weekday()
+
     return weekday_minsk, current_date_minsk
 
 
@@ -51,18 +46,12 @@ def get_current_date(days: int = 0) -> tuple[int, date]:
 def is_same_week(lesson_date: date) -> bool:
     current_weekday, current_date_minsk = get_current_date()
     lesson_weekday = lesson_date.weekday()
-    current_datetime_minsk = _get_current_datetime_minsk()
-    if 4 <= current_weekday <= 6 and current_datetime_minsk.time() <= datetime.strptime("16:30", "%H:%M").time():
-        current_monday = current_date_minsk + timedelta(days=(7 - current_weekday))
-    else:
+
+    if 0 <= current_weekday <= 3:
         current_monday = current_date_minsk - timedelta(days=current_weekday)
+    else:
+        current_monday = current_date_minsk + timedelta(days=(7 - current_weekday))
 
     lesson_monday = lesson_date - timedelta(days=lesson_weekday)
 
     return current_monday == lesson_monday
-
-
-if __name__ == "__main__":
-    print(get_current_date())
-    print(get_week_date_range())
-    print(get_date_by_weekday(0))
