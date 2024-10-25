@@ -3,6 +3,7 @@ from datetime import timedelta, datetime, date
 import pytz
 
 
+
 def _get_current_datetime_minsk(days: int = 0) -> datetime:
     current_utc_time = datetime.now(pytz.timezone("UTC")) + timedelta(days=days)
     minsk_timezone = pytz.timezone("Europe/Minsk")

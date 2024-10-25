@@ -1,0 +1,4 @@
+.venv
+.idea
+upload_schedule
+__pycache__
