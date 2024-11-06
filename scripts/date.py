@@ -6,8 +6,8 @@ import pytz
 # Получение диапазона дат недели
 def get_week_date_range() -> tuple[str, str]:
     current_weekday, current_date_minsk = get_current_date()
-
-    if 0 <= current_weekday <= 3:
+    #                           3
+    if 0 <= current_weekday <= 1:
         start_date = current_date_minsk - timedelta(days=current_weekday)
     else:
         start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
@@ -20,8 +20,8 @@ def get_week_date_range() -> tuple[str, str]:
 # Получение даты по номеру дня недели
 def get_date_by_weekday(day_number: int) -> str:
     current_weekday, current_date_minsk = get_current_date()
-
-    if 0 <= current_weekday <= 3:
+    #                           3
+    if 0 <= current_weekday <= 1:
         start_date = current_date_minsk - timedelta(days=current_weekday)
     else:
         start_date = current_date_minsk + timedelta(days=(7 - current_weekday))
@@ -46,8 +46,8 @@ def get_current_date(days: int = 0) -> tuple[int, date]:
 def is_same_week(lesson_date: date) -> bool:
     current_weekday, current_date_minsk = get_current_date()
     lesson_weekday = lesson_date.weekday()
-
-    if 0 <= current_weekday <= 3:
+    #                           3
+    if 0 <= current_weekday <= 1:
         current_monday = current_date_minsk - timedelta(days=current_weekday)
     else:
         current_monday = current_date_minsk + timedelta(days=(7 - current_weekday))
